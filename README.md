@@ -31,3 +31,28 @@ def fontforge_plugin_init(**kw):
     fontforge_plugin_helper.addSystemHook('newFontHook', myNewFontHook)
     fontforge_plugin_helper.addSystemHook('loadFontHook', myLoadFontHook)
 ```
+
+### fontforge_plugin_helper.addFontGenerateHook()
+
+```python
+def myPreGenerationHook(font):
+    do_something
+
+
+def myPostGenerationHook(font):
+    do_something
+
+
+def myNewOrLoadFontHook(font):
+    fontforge_plugin_helper.addFontGenerateHook(font,
+                                                'generateFontPreHook',
+                                                myPreGenerationHook)
+    fontforge_plugin_helper.addFontGenerateHook(font,
+                                                'generateFontPostHook',
+                                                myPostGenerationHook)
+
+
+def fontforge_plugin_init(**kw):
+    fontforge_plugin_helper.addSystemHook('newFontHook', myNewOrLoadFontHook)
+    fontforge_plugin_helper.addSystemHook('loadFontHook', myNewOrLoadFontHook)
+```
