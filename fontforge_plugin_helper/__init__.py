@@ -1,6 +1,6 @@
 """A collection of common routines for Fontforge plugins"""
 
-from typing import Literal, Callable
+from typing import Literal, Callable, Optional
 
 import fontforge
 
@@ -26,7 +26,10 @@ def addSystemHook(
 
     If there is some function in already ``newFontHook`` or ``loadFontHook``,
     sets a new one which calls the existing one followed by the one
-    about to be appended."""
+    about to be appended.
+
+    Use keyword-only parameters ``enableIfGUIMode`` and ``enableIfScriptMode``
+    to control when the hook will be enabled."""
 
     assert isinstance(fontforge.hooks, dict)
     if _checkEnabled(enableIfGUIMode, enableIfScriptMode):
@@ -54,7 +57,10 @@ def addFontGenerateHook(
 
     If there is some function in already ``generateFontPreHook`` or ``generateFontPostHook``,
     sets a new one which calls the existing one followed by the one
-    about to be appended."""
+    about to be appended.
+
+    Use keyword-only parameters ``enableIfGUIMode`` and ``enableIfScriptMode``
+    to control when the hook will be enabled."""
 
     assert isinstance(font.temporary, dict)
     if _checkEnabled(enableIfGUIMode, enableIfScriptMode):
@@ -68,3 +74,37 @@ def addFontGenerateHook(
             font.temporary[name] = chainHook
         else:
             font.temporary[name] = hook
+
+
+def generationHookSetter(
+    generateFontPreHook: Optional[Callable[[fontforge.font, str], None]],
+    generateFontPostHook: Optional[Callable[[fontforge.font, str], None]],
+    *,
+    enableIfGUIMode: bool = True,
+    enableIfScriptMode: bool = True,
+) -> Callable[[fontforge.font], None]:
+    """Returns a function for ``newFontHook`` or ``loadFontHook`` which sets font generation hook
+
+    Returns function for ``newFontHook`` or ``loadFontHook``
+    which sets ``generateFontPreHook`` and/or ``generateFontPostHook``.
+    A ``Callable`` object or ``None`` to leave untouched.
+
+    Use keyword-only parameters ``enableIfGUIMode`` and ``enableIfScriptMode``
+    to control when the hook will be enabled."""
+    def hook(font: fontforge.font):
+        if generateFontPreHook:
+            addFontGenerateHook(
+                font,
+                'generateFontPreHook',
+                generateFontPreHook,
+                enableIfGUIMode=enableIfGUIMode,
+                enableIfScriptMode=enableIfScriptMode,
+            )
+            addFontGenerateHook(
+                font,
+                'generateFontPostHook',
+                generateFontPostHook,
+                enableIfGUIMode=enableIfGUIMode,
+                enableIfScriptMode=enableIfScriptMode,
+            )
+    return hook

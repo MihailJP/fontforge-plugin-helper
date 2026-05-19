@@ -56,3 +56,31 @@ def fontforge_plugin_init(**kw):
     fontforge_plugin_helper.addSystemHook('newFontHook', myNewOrLoadFontHook)
     fontforge_plugin_helper.addSystemHook('loadFontHook', myNewOrLoadFontHook)
 ```
+
+### fontforge_plugin_helper.generationHookSetter()
+
+```python
+def myPreGenerationHook(font):
+    do_something
+
+
+def myPostGenerationHook(font):
+    do_something
+
+
+def fontforge_plugin_init(**kw):
+    fontforge_plugin_helper.addSystemHook(
+        'newFontHook',
+        fontforge_plugin_helper.generationHookSetter(
+            myPreGenerationHook,
+            myPostGenerationHook,
+        )
+    )
+    fontforge_plugin_helper.addSystemHook(
+        'loadFontHook',
+        fontforge_plugin_helper.generationHookSetter(
+            myPreGenerationHook,
+            None,  # if not needed
+        )
+    )
+```
