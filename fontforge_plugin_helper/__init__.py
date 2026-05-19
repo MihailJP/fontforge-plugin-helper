@@ -5,9 +5,22 @@ from typing import Literal, Callable
 import fontforge
 
 
+def _checkEnabled(
+    enableIfGUIMode: bool = True,
+    enableIfScriptMode: bool = True,
+) -> bool:
+    if fontforge.hasUserInterface:
+        return enableIfGUIMode
+    else:
+        return enableIfScriptMode
+
+
 def addSystemHook(
     name: Literal['newFontHook', 'loadFontHook'],
     hook: Callable[[fontforge.font], None],
+    *,
+    enableIfGUIMode: bool = True,
+    enableIfScriptMode: bool = True,
 ):
     """Add ``newFontHook`` or ``loadFontHook``
 
@@ -16,22 +29,26 @@ def addSystemHook(
     about to be appended."""
 
     assert isinstance(fontforge.hooks, dict)
-    if name in fontforge.hooks:
-        currentHook = fontforge.hooks[name]
+    if _checkEnabled(enableIfGUIMode, enableIfScriptMode):
+        if name in fontforge.hooks:
+            currentHook = fontforge.hooks[name]
 
-        def chainHook(font: fontforge.font):
-            currentHook(font)
-            hook(font)
+            def chainHook(font: fontforge.font):
+                currentHook(font)
+                hook(font)
 
-        fontforge.hooks[name] = chainHook
-    else:
-        fontforge.hooks[name] = hook
+            fontforge.hooks[name] = chainHook
+        else:
+            fontforge.hooks[name] = hook
 
 
 def addFontGenerateHook(
     font: fontforge.font,
     name: Literal['generateFontPreHook', 'generateFontPostHook'],
     hook: Callable[[fontforge.font, str], None],
+    *,
+    enableIfGUIMode: bool = True,
+    enableIfScriptMode: bool = True,
 ):
     """Add ``generateFontPreHook`` or ``generateFontPostHook``
 
@@ -40,13 +57,14 @@ def addFontGenerateHook(
     about to be appended."""
 
     assert isinstance(font.temporary, dict)
-    if name in font.temporary:
-        currentHook = font.temporary[name]
+    if _checkEnabled(enableIfGUIMode, enableIfScriptMode):
+        if name in font.temporary:
+            currentHook = font.temporary[name]
 
-        def chainHook(font: fontforge.font, target: str):
-            currentHook(font, target)
-            hook(font, target)
+            def chainHook(font: fontforge.font, target: str):
+                currentHook(font, target)
+                hook(font, target)
 
-        font.temporary[name] = chainHook
-    else:
-        font.temporary[name] = hook
+            font.temporary[name] = chainHook
+        else:
+            font.temporary[name] = hook
