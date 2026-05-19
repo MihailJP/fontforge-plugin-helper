@@ -62,7 +62,8 @@ def addFontGenerateHook(
     Use keyword-only parameters ``enableIfGUIMode`` and ``enableIfScriptMode``
     to control when the hook will be enabled."""
 
-    assert isinstance(font.temporary, dict)
+    if not isinstance(font.temporary, dict):
+        font.temporary = {}
     if _checkEnabled(enableIfGUIMode, enableIfScriptMode):
         if name in font.temporary:
             currentHook = font.temporary[name]
