@@ -59,6 +59,10 @@ def addFontGenerateHook(
     sets a new one which calls the existing one followed by the one
     about to be appended.
 
+    If ``font.temporary`` is not a ``dict``, it is replaced with an empty ``dict`` first,
+    then the hook is registered. In such case any previous content will be overwritten
+    without warning.
+
     Use keyword-only parameters ``enableIfGUIMode`` and ``enableIfScriptMode``
     to control when the hook will be enabled."""
 
