@@ -1,33 +1,33 @@
-Fontforge plugin template
-=========================
+Fontforge plugin helper
+=======================
 
-Description here
+A collection of common routines for Fontforge plugins
+
+This module is intended to be called from Fontforge plugins.
+This module itself is not a Fontforge plugin.
 
 Install
 -------
 
 ```shell
-pip3 install fontforge_hello
-```
-
-### Make sure Fontforge Python module is usable
-
-In interactive mode of Python, run:
-
-```python
-import fontforge
-```
-
-If it raises ``ModuleNotFoundError`` exception, install Fontforge first. If
-installed, make sure the build option set that the Python module gets also
-installed. If already so, Python interpreter does not recognize the module
-path where the required module.
-
-```shell
-export PYTHONPATH=/path/to/fontforge/python/module:$PYTHONPATH
+pip3 install fontforge_plugin_helper
 ```
 
 Usage
 -----
 
-Explanation here
+### fontforge_plugin_helper.addSystemHook()
+
+```python
+def myNewFontHook(font):
+    do_something
+
+
+def myLoadFontHook(font):
+    do_something
+
+
+def fontforge_plugin_init(**kw):
+    fontforge_plugin_helper.addSystemHook('newFontHook', myNewFontHook)
+    fontforge_plugin_helper.addSystemHook('loadFontHook', myLoadFontHook)
+```
