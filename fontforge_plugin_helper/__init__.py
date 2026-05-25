@@ -105,6 +105,7 @@ def generationHookSetter(
                 enableIfGUIMode=enableIfGUIMode,
                 enableIfScriptMode=enableIfScriptMode,
             )
+        if generateFontPostHook:
             addFontGenerateHook(
                 font,
                 'generateFontPostHook',
