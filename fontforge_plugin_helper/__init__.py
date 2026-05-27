@@ -1,6 +1,7 @@
 """A collection of common routines for Fontforge plugins"""
 
-from typing import Literal, Callable, Optional
+from os import PathLike
+from typing import Literal, Callable, Optional, Sequence
 
 import fontforge
 
@@ -114,3 +115,68 @@ def generationHookSetter(
                 enableIfScriptMode=enableIfScriptMode,
             )
     return hook
+
+
+def newFontWithoutHook() -> fontforge.font:
+    """Creates a new font without executing ``fontforge.hooks['newFontHook']``"""
+    hook = None
+    if 'newFontHook' in fontforge.hooks:
+        hook = fontforge.hooks['newFontHook']
+        del fontforge.hooks['newFontHook']  # pyright: ignore[reportGeneralTypeIssues]
+    font = fontforge.font()
+    if hook:
+        fontforge.hooks['newFontHook'] = hook
+    font.changed = False
+    return font
+
+
+def loadFontWithoutHook(filename: str | PathLike, flags: tuple | int | None = None) -> fontforge.font:
+    """Loads a font without executing ``fontforge.hooks['loadFontHook']``"""
+    hook = None
+    if 'loadFontHook' in fontforge.hooks:
+        hook = fontforge.hooks['loadFontHook']
+        del fontforge.hooks['loadFontHook']  # pyright: ignore[reportGeneralTypeIssues]
+    font = fontforge.open(str(filename), flags)
+    if hook:
+        fontforge.hooks['loadFontHook'] = hook
+    font.changed = False
+    return font
+
+
+def exportWithoutHook(font: fontforge.font, filename: str | PathLike, **options):
+    """Call ``font.generate()`` without executing ``generateFontPreHook`` or ``generateFontPostHook``."""
+    hooks = {}
+    changed = font.changed
+    for hook in ['generateFontPreHook', 'generateFontPostHook']:
+        if isinstance(font.temporary, dict) and hook in font.temporary:
+            hooks[hook] = font.temporary[hook]
+            del font.temporary[hook]
+    try:
+        font.generate(str(filename), **options)
+    finally:
+        if isinstance(font.temporary, dict):
+            for hook, hookfunc in hooks.items():
+                font.temporary[hook] = hookfunc
+        font.changed = changed
+
+
+def exportTtcWithoutHook(
+    font: fontforge.font,
+    filename: str | PathLike,
+    others: Sequence[fontforge.font] | fontforge.font | None,
+    **options,
+):
+    """Call ``font.generateTtc()`` without executing ``generateFontPreHook`` or ``generateFontPostHook``."""
+    hooks = {}
+    changed = font.changed
+    for hook in ['generateFontPreHook', 'generateFontPostHook']:
+        if isinstance(font.temporary, dict) and hook in font.temporary:
+            hooks[hook] = font.temporary[hook]
+            del font.temporary[hook]
+    try:
+        font.generateTtc(str(filename), others, **options)
+    finally:
+        if isinstance(font.temporary, dict):
+            for hook, hookfunc in hooks.items():
+                font.temporary[hook] = hookfunc
+        font.changed = changed
