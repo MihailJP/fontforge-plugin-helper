@@ -1,7 +1,7 @@
 """A collection of common routines for Fontforge plugins"""
 
 from os import PathLike
-from typing import Literal, Callable, Optional, Sequence
+from typing import Literal, Callable, Optional, Sequence, Union
 
 import fontforge
 
@@ -130,7 +130,7 @@ def newFontWithoutHook() -> fontforge.font:
     return font
 
 
-def loadFontWithoutHook(filename: str | PathLike, flags: tuple | int | None = None) -> fontforge.font:
+def loadFontWithoutHook(filename: Union[str, PathLike], flags: Union[tuple, int, None] = None) -> fontforge.font:
     """Loads a font without executing ``fontforge.hooks['loadFontHook']``"""
     hook = None
     if 'loadFontHook' in fontforge.hooks:
@@ -143,7 +143,7 @@ def loadFontWithoutHook(filename: str | PathLike, flags: tuple | int | None = No
     return font
 
 
-def exportWithoutHook(font: fontforge.font, filename: str | PathLike, **options):
+def exportWithoutHook(font: fontforge.font, filename: Union[str, PathLike], **options):
     """Call ``font.generate()`` without executing ``generateFontPreHook`` or ``generateFontPostHook``."""
     hooks = {}
     changed = font.changed
@@ -162,8 +162,8 @@ def exportWithoutHook(font: fontforge.font, filename: str | PathLike, **options)
 
 def exportTtcWithoutHook(
     font: fontforge.font,
-    filename: str | PathLike,
-    others: Sequence[fontforge.font] | fontforge.font | None,
+    filename: Union[str, PathLike],
+    others: Union[Sequence[fontforge.font], fontforge.font, None],
     **options,
 ):
     """Call ``font.generateTtc()`` without executing ``generateFontPreHook`` or ``generateFontPostHook``."""
