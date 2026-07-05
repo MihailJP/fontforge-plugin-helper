@@ -9,6 +9,9 @@ from .hook import (
     exportWithoutHook,
     exportTtcWithoutHook,
 )
+from .translation import (
+    Translations,
+)
 
 __all__ = [
     # hook.py
@@ -19,4 +22,7 @@ __all__ = [
     'loadFontWithoutHook',
     'exportWithoutHook',
     'exportTtcWithoutHook',
+
+    # translation.py
+    'Translations',
 ]

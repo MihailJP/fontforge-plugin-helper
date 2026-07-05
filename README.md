@@ -16,7 +16,9 @@ pip3 install fontforge_plugin_helper
 Usage
 -----
 
-### fontforge_plugin_helper.addSystemHook()
+### Hook-related features
+
+#### fontforge_plugin_helper.addSystemHook()
 
 ```python
 def myNewFontHook(font):
@@ -32,7 +34,7 @@ def fontforge_plugin_init(**kw):
     fontforge_plugin_helper.addSystemHook('loadFontHook', myLoadFontHook)
 ```
 
-### fontforge_plugin_helper.addFontGenerateHook()
+#### fontforge_plugin_helper.addFontGenerateHook()
 
 ```python
 def myPreGenerationHook(font):
@@ -57,7 +59,7 @@ def fontforge_plugin_init(**kw):
     fontforge_plugin_helper.addSystemHook('loadFontHook', myNewOrLoadFontHook)
 ```
 
-### fontforge_plugin_helper.generationHookSetter()
+#### fontforge_plugin_helper.generationHookSetter()
 
 ```python
 def myPreGenerationHook(font):
@@ -82,5 +84,34 @@ def fontforge_plugin_init(**kw):
             myPreGenerationHook,
             None,  # if not needed
         )
+    )
+```
+
+### Translation-related features
+
+#### class fontforge_plugin_helper.Translations
+
+```python
+tr = fontforge_plugin_helper.Translations()
+
+def spam(u, font):
+    pass
+
+def fontforge_plugin_init(**kw):
+    tr.set('fr', '_Open', '_Ouvrir')
+    tr.setTranslations('fr', {
+        '_Open': '_Ouvrir',
+        '_Close': '_Fermer',
+        '_MyMenu': '_MonMenu',
+    })
+    tr.setTranslations('de', {
+        '_Open': 'Ö_ffnen',
+        '_Close': 'S_chließen',
+        '_MyMenu': '_MeinMenü',
+    })
+    fontforge.registerMenuItem(
+        callback=spam,
+        context="Font",
+        name=tr.get('_MyMenu')
     )
 ```
