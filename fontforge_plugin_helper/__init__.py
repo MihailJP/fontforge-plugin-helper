@@ -1,5 +1,8 @@
 """A collection of common routines for Fontforge plugins"""
 
+from .bezier import (
+    getInterpolatedCoord,
+)
 from .hook import (
     addSystemHook,
     addFontGenerateHook,
@@ -14,6 +17,9 @@ from .translation import (
 )
 
 __all__ = [
+    # bezier.py
+    'getInterpolatedCoord',
+
     # hook.py
     'addSystemHook',
     'addFontGenerateHook',

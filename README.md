@@ -16,6 +16,15 @@ pip3 install fontforge_plugin_helper
 Usage
 -----
 
+### Bézier-related features
+
+#### fontforge_plugin_helper.getInterpolatedCoord()
+
+```python
+contour = font['A'].layers[1][0]
+x, y = fontforge_plugin_helper.getInterpolatedCoord(contour, 1.5)
+```
+
 ### Hook-related features
 
 #### fontforge_plugin_helper.addSystemHook()
