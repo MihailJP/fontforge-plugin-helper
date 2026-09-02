@@ -1,4 +1,4 @@
-"""A collection of common routines for Fontforge plugins"""
+"""A collection of hook-related routines for Fontforge plugins"""
 
 from os import PathLike
 from typing import Literal, Callable, Optional, Sequence, Union
