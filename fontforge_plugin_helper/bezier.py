@@ -1,6 +1,7 @@
 """A collection of Bézier-related routines for Fontforge plugins"""
 
 from math import floor
+from typing import Any
 
 import fontforge
 
@@ -60,6 +61,13 @@ def _cubicInterpolate(
     return ans
 
 
+def _isInt(val: Any) -> bool:  # compatibility for Python < 3.12
+    try:
+        return val.is_integer()
+    except AttributeError:
+        return isinstance(val, int)
+
+
 def getInterpolatedCoord(contour: fontforge.contour, pointNumber: float) -> tuple[float, float]:
     """Get Bézier interpolation of given contour
 
@@ -74,7 +82,7 @@ def getInterpolatedCoord(contour: fontforge.contour, pointNumber: float) -> tupl
     def _point(offset: int = 0) -> fontforge.point:
         return _getPoint(contour, floor(pointNumber) + offset)
 
-    if pointNumber.is_integer() and _point().on_curve:
+    if _isInt(pointNumber) and _point().on_curve:
         return _coord(_point())
     elif (p1 := _point()).on_curve and (p2 := _point(1)).on_curve:
         return _linearInterpolate(p1.x, p1.y, p2.x, p2.y, pointNumber % 1)
