@@ -1,6 +1,7 @@
 """Translation-related class for Fontforge plugins"""
 
 from locale import getlocale, LC_MESSAGES
+from typing import Dict
 
 
 def _locale() -> str:
@@ -23,7 +24,7 @@ class Translations():
         self._translation.setdefault(english, {})
         self._translation[english][lang] = translation
 
-    def setTranslations(self, lang: str, translations: dict[str, str]):
+    def setTranslations(self, lang: str, translations: Dict[str, str]):
         """Append translations for given language
 
         :param lang: Language code with or without country code, \

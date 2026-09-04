@@ -1,12 +1,12 @@
 """A collection of Bézier-related routines for Fontforge plugins"""
 
 from math import floor
-from typing import Any
+from typing import Any, Tuple
 
 import fontforge
 
 
-def _coord(point: fontforge.point) -> tuple[float, float]:
+def _coord(point: fontforge.point) -> Tuple[float, float]:
     return point.x, point.y
 
 
@@ -19,7 +19,7 @@ def _getPoint(contour: fontforge.contour, pointNumber: int) -> fontforge.point:
         raise IndexError('index in open contour out of bounds')
 
 
-def _linearInterpolate(x1: float, y1: float, x2: float, y2: float, fr: float) -> tuple[float, float]:
+def _linearInterpolate(x1: float, y1: float, x2: float, y2: float, fr: float) -> Tuple[float, float]:
     assert 0 <= fr <= 1
     return (
         x1 + (x2 - x1) * fr,
@@ -32,7 +32,7 @@ def _quadraticInterpolate(
     x2: float, y2: float,
     x3: float, y3: float,
     fr: float,
-) -> tuple[float, float]:
+) -> Tuple[float, float]:
     assert 0 <= fr <= 1
     ans = tuple(
         (a - 2 * b + c) * (fr ** 2) +
@@ -49,7 +49,7 @@ def _cubicInterpolate(
     x3: float, y3: float,
     x4: float, y4: float,
     fr: float,
-) -> tuple[float, float]:
+) -> Tuple[float, float]:
     assert 0 <= fr <= 1
     ans = tuple(
         (d - 3 * c + 3 * b - a) * (fr ** 3) +
@@ -68,7 +68,7 @@ def _isInt(val: Any) -> bool:  # compatibility for Python < 3.12
         return isinstance(val, int)
 
 
-def getInterpolatedCoord(contour: fontforge.contour, pointNumber: float) -> tuple[float, float]:
+def getInterpolatedCoord(contour: fontforge.contour, pointNumber: float) -> Tuple[float, float]:
     """Get Bézier interpolation of given contour
 
     If ``pointNumber`` is an integer and such point is on-curve, returns the coordinate of that point.
