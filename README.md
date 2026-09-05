@@ -25,6 +25,13 @@ contour = font['A'].layers[1][0]
 x, y = fontforge_plugin_helper.getInterpolatedCoord(contour, 1.5)
 ```
 
+#### fontforge_plugin_helper.getTangentAngle()
+
+```python
+contour = font['A'].layers[1][0]
+tangentAngle = fontforge_plugin_helper.getTangentAngle(contour, 1.5)
+```
+
 ### Hook-related features
 
 #### fontforge_plugin_helper.addSystemHook()

@@ -2,6 +2,7 @@
 
 from .bezier import (
     getInterpolatedCoord,
+    getTangentAngle,
 )
 from .hook import (
     addSystemHook,
@@ -19,6 +20,7 @@ from .translation import (
 __all__ = [
     # bezier.py
     'getInterpolatedCoord',
+    'getTangentAngle',
 
     # hook.py
     'addSystemHook',
