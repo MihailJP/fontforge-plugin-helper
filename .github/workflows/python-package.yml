@@ -29,9 +29,10 @@ jobs:
       uses: MihailJP/setup-fontforge@v1
     - name: Install dependencies
       run: |
-        sudo apt remove firefox
-        sudo apt update
-        sudo apt upgrade
+        sudo apt-get remove firefox
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get install language-pack-de language-pack-fr language-pack-zh-hans language-pack-zh-hant
         python3 -m pip install --upgrade pip
         python3 -m pip install flake8 pytest build
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
