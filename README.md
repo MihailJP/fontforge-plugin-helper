@@ -32,6 +32,14 @@ contour = font['A'].layers[1][0]
 tangentAngle = fontforge_plugin_helper.getTangentAngle(contour, 1.5)
 ```
 
+### Glyph name related features
+
+#### fontforge_plugin_helper.escapeGlyphName()
+
+```python
+filename = '{0}.svg'.format(fontforge_plugin_helper.escapeGlyphName('A'))
+```
+
 ### Hook-related features
 
 #### fontforge_plugin_helper.addSystemHook()

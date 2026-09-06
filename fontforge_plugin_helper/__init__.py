@@ -4,6 +4,9 @@ from .bezier import (
     getInterpolatedCoord,
     getTangentAngle,
 )
+from .glyphname import (
+    escapeGlyphName,
+)
 from .hook import (
     addSystemHook,
     addFontGenerateHook,
@@ -21,6 +24,9 @@ __all__ = [
     # bezier.py
     'getInterpolatedCoord',
     'getTangentAngle',
+
+    # glyphname.py
+    'escapeGlyphName',
 
     # hook.py
     'addSystemHook',
